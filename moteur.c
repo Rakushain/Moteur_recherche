@@ -31,7 +31,7 @@ void classify_files(char *mot)
 {
     /* Fonction qui permet de compter le nombres d'occurences dans tout les fichiers */
     char *fich = "fichier_";
-    char *extension = ".CRI.txt";
+    char *extension = ".txt";
 
     char **liste_fichiers = malloc(30 * sizeof(char*)); // tableau de string qui garde les noms des differents fichiers
     
@@ -107,12 +107,14 @@ void selection_sort(int *arr, char **liste_fichiers, int n)
             }
         }
         swap(&arr[min_idx], &arr[i]);
+        // on swap la position des 2 tableaux pour garder l'ordre
         swap_string(liste_fichiers[min_idx], liste_fichiers[i]);
     }
 }
 
 
 void print(int *liste_occurences, char **liste_fichiers, char *mot, int n){
+    /* Fonction utilisee pour afficher le nombre d occurences du mot dans tout les fichiers*/
     for(int i = 0; i < n; i++){
         printf("%s nombre d’occurrences de %s = %d\n", liste_fichiers[i], mot, liste_occurences[i]);
     }
