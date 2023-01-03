@@ -7,5 +7,6 @@
 
 int count_occ(char *nom, char *mot);
 int compare(char *c1, char *c2, int n);
+void classify_files(char *mot);
 
 #endif
