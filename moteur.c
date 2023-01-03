@@ -103,3 +103,53 @@ void selection_sort(int *arr, char *liste_fichiers, int n)
     }
 }
 
+
+char* maj_to_min (char* c)
+{
+    char c_ret[50];
+    int i = 0;
+    int cpt=0;
+    while (c[i] != '\0')
+    {
+        if('A'<=c[i]<='Z')
+        {
+            c_ret[cpt]= c[i] + 32;
+            cpt++;
+        }        
+        else if('a'<=c[i]<='z')
+        {
+            c_ret[cpt]= c[i];
+            cpt++;
+        }
+        i++
+    }
+    c_ret[cpt]= '\0';
+    if (c_ret[cpt-1]=='s'){
+        c_ret[cpt-1]='\0';
+    }
+    
+    return c_ret;
+}
+
+int compare(char *c1, char *c2, int n){
+    char mot[strlen(C1)];
+
+    for(int i = 0; i < n; i++)
+        {
+        if(c1[i] = "'")
+        {
+        i++;
+        n++;
+        }
+        if(c1[i] = c2[i] || strlen(c1) != strlen(c2))
+        {
+            return 0;
+        }
+        if(c1[i+32] = c2[i] || strlen(c1) != strlen(c2))
+        {
+            return 0;
+        }
+
+    }
+    return 1;
+}
