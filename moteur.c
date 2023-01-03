@@ -63,9 +63,7 @@ void classify_files(char *mot)
     // on va chercher à trier le tableau des occurences pour savoir quel fichier contient le plus de fois le mot 
     selection_sort(liste_occurences, *liste_fichiers, 3);
 
-    for(int i = 0; i < 3; i++){
-        printf("%d ", liste_occurences[i]);
-    }
+    print(liste_occurences, *liste_fichiers, mot, 3);
 
     // On libere toute la memoire allouee
     for(int i = 0; i < 3; i++){
@@ -85,6 +83,16 @@ void swap(int* x, int* y)
     *x = *y;
     *y = temp;
 }
+
+void swap_string(char* x, char* y)
+/* Fonction swap_char utilisee dans le tri par selection*/
+{
+    char *temp = (char *)malloc((strlen(x) + 1) * sizeof(char));
+    strcpy(temp, x);
+    strcpy(x, y);
+    strcpy(y, temp);
+    free(temp);
+}
  
 
 void selection_sort(int *arr, char *liste_fichiers, int n)
@@ -100,6 +108,13 @@ void selection_sort(int *arr, char *liste_fichiers, int n)
             }
         }
         swap(&arr[min_idx], &arr[i]);
+        swap_string(liste_fichiers[min_idx], liste_fichiers[i]);
     }
 }
 
+
+void print(int *liste_occurences, char *liste_fichiers, char *mot, int n){
+    for(int i = 0; i < n; i++){
+        printf("%s nombre d’occurrences de %s = %d\n", &liste_fichiers[i], mot, liste_occurences[i]);
+    }
+}
