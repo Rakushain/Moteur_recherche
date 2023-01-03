@@ -7,6 +7,11 @@
 
 int count_occ(char *nom, char *mot);
 int compare(char *c1, char *c2, int n);
+
 void classify_files(char *mot);
+
+void swap(int* x, int* y);
+void selection_sort(int *arr, char *liste_fichiers, int n);
+
 
 #endif
