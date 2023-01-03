@@ -4,7 +4,6 @@ CFLAGS = -Wall -g
 all: run
 
 run: moteur
-	./moteur
 
 moteur: moteur.o main.o
 	$(CC) $(CFLAGS) $^ -o $@
