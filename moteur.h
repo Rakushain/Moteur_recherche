@@ -11,7 +11,9 @@ int compare(char *c1, char *c2, int n);
 void classify_files(char *mot);
 
 void swap(int* x, int* y);
-void selection_sort(int *arr, char *liste_fichiers, int n);
+void swap_string(char* x, char* y);
+void selection_sort(int *arr, char **liste_fichiers, int n);
+void print(int *liste_occurences, char **liste_fichiers, char *mot, int n);
 
 
 #endif

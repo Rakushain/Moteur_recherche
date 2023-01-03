@@ -18,7 +18,7 @@ int count_occ(char *nom, char *mot)
     
     // Lit le fichier mot par mot
     while (fscanf(fichier, "%s", x) == 1) {
-        printf("%s\n", x);
+        // printf("%s\n", x);
         if (strcmp(x, mot) == 0){
             occ++;
         }
@@ -60,9 +60,9 @@ void classify_files(char *mot)
     }
     
     // on va chercher à trier le tableau des occurences pour savoir quel fichier contient le plus de fois le mot 
-    selection_sort(liste_occurences, *liste_fichiers, 3);
+    selection_sort(liste_occurences, liste_fichiers, 3);
 
-    print(liste_occurences, *liste_fichiers, mot, 3);
+    print(liste_occurences, liste_fichiers, mot, 3);
 
     // On libere toute la memoire allouee
     for(int i = 0; i < 3; i++){
@@ -94,7 +94,7 @@ void swap_string(char* x, char* y)
 }
  
 
-void selection_sort(int *arr, char *liste_fichiers, int n)
+void selection_sort(int *arr, char **liste_fichiers, int n)
 {
     /* Tri par selection pour trier le tableau d'occurences*/
     int i, j, min_idx;
@@ -112,9 +112,9 @@ void selection_sort(int *arr, char *liste_fichiers, int n)
 }
 
 
-void print(int *liste_occurences, char *liste_fichiers, char *mot, int n){
+void print(int *liste_occurences, char **liste_fichiers, char *mot, int n){
     for(int i = 0; i < n; i++){
-        printf("%s nombre d’occurrences de %s = %d\n", &liste_fichiers[i], mot, liste_occurences[i]);
+        printf("%s nombre d’occurrences de %s = %d\n", liste_fichiers[i], mot, liste_occurences[i]);
     }
 }
 
