@@ -3,7 +3,6 @@
 
 #include "moteur.h"
 
-
 int count_occ(char *nom, char *mot)
 /* Fonction qui compte le nombre de fois où le mot *mot est présent dans le fichier *nom */
 {
@@ -63,9 +62,7 @@ void classify_files(char *mot)
     // on va chercher à trier le tableau des occurences pour savoir quel fichier contient le plus de fois le mot 
     selection_sort(liste_occurences, *liste_fichiers, 3);
 
-    for(int i = 0; i < 3; i++){
-        printf("%d ", liste_occurences[i]);
-    }
+    print(liste_occurences, *liste_fichiers, mot, 3);
 
     // On libere toute la memoire allouee
     for(int i = 0; i < 3; i++){
@@ -85,6 +82,16 @@ void swap(int* x, int* y)
     *x = *y;
     *y = temp;
 }
+
+void swap_string(char* x, char* y)
+/* Fonction swap_char utilisee dans le tri par selection*/
+{
+    char *temp = (char *)malloc((strlen(x) + 1) * sizeof(char));
+    strcpy(temp, x);
+    strcpy(x, y);
+    strcpy(y, temp);
+    free(temp);
+}
  
 
 void selection_sort(int *arr, char *liste_fichiers, int n)
@@ -100,56 +107,65 @@ void selection_sort(int *arr, char *liste_fichiers, int n)
             }
         }
         swap(&arr[min_idx], &arr[i]);
+        swap_string(liste_fichiers[min_idx], liste_fichiers[i]);
     }
 }
 
 
-char* maj_to_min (char* c)
-{
-    char c_ret[50];
-    int i = 0;
-    int cpt=0;
-    while (c[i] != '\0')
-    {
-        if('A'<=c[i]<='Z')
-        {
-            c_ret[cpt]= c[i] + 32;
-            cpt++;
-        }        
-        else if('a'<=c[i]<='z')
-        {
-            c_ret[cpt]= c[i];
-            cpt++;
-        }
-        i++
+void print(int *liste_occurences, char *liste_fichiers, char *mot, int n){
+    for(int i = 0; i < n; i++){
+        printf("%s nombre d’occurrences de %s = %d\n", &liste_fichiers[i], mot, liste_occurences[i]);
     }
-    c_ret[cpt]= '\0';
-    if (c_ret[cpt-1]=='s'){
-        c_ret[cpt-1]='\0';
-    }
+}
+
+
+
+// char* maj_to_min (char* c)
+// {
+//     char c_ret[50];
+//     int i = 0;
+//     int cpt=0;
+//     while (c[i] != '\0')
+//     {
+//         if('A'<=c[i]<='Z')
+//         {
+//             c_ret[cpt]= c[i] + 32;
+//             cpt++;
+//         }        
+//         else if('a'<=c[i]<='z')
+//         {
+//             c_ret[cpt]= c[i];
+//             cpt++;
+//         }
+//         i++
+//     }
+//     c_ret[cpt]= '\0';
+//     if (c_ret[cpt-1]=='s'){
+//         c_ret[cpt-1]='\0';
+//     }
     
-    return c_ret;
-}
+//     return c_ret;
+// }
 
-int compare(char *c1, char *c2, int n){
-    char mot[strlen(C1)];
+// int compare(char *c1, char *c2, int n){
+//     char mot[strlen(C1)];
 
-    for(int i = 0; i < n; i++)
-        {
-        if(c1[i] = "'")
-        {
-        i++;
-        n++;
-        }
-        if(c1[i] = c2[i] || strlen(c1) != strlen(c2))
-        {
-            return 0;
-        }
-        if(c1[i+32] = c2[i] || strlen(c1) != strlen(c2))
-        {
-            return 0;
-        }
+//     for(int i = 0; i < n; i++)
+//         {
+//         if(c1[i] = "'")
+//         {
+//         i++;
+//         n++;
+//         }
+//         if(c1[i] = c2[i] || strlen(c1) != strlen(c2))
+//         {
+//             return 0;
+//         }
+//         if(c1[i+32] = c2[i] || strlen(c1) != strlen(c2))
+//         {
+//             return 0;
+//         }
 
-    }
-    return 1;
-}
+//     }
+//     return 1;
+// }
