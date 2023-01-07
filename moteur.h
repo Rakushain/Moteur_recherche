@@ -4,16 +4,24 @@
 #include <stdlib.h>
 #include "string.h"
 
+typedef struct {
+    char *mot; // mot le plus long = 45 lettres
+    int nb_occ;
+} CRI;
+
 
 int count_occ(char *nom, char *mot);
-int compare(char *c1, char *c2, int n);
 
 void classify_files(char *mot);
 
 void swap(int* x, int* y);
 void swap_string(char* x, char* y);
-void selection_sort(int *arr, char **liste_fichiers, int n);
-void print(int *liste_occurences, char **liste_fichiers, char *mot, int n);
+void selection_sort(int *arr, char **liste_fichiers, int fichier_debut, int fichier_fin);
+void print(int *liste_occurences, char **liste_fichiers, char *mot, int fichier_debut, int fichier_fin);
+
+CRI* indexation(char *nom);
+int nb_mots(char *nom);
+void affiche_liste_indexee(CRI *liste_indexee, int n);
 
 
 #endif

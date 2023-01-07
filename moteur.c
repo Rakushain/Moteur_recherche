@@ -8,7 +8,7 @@ int count_occ(char *nom, char *mot)
 {
     FILE *fichier;
     int occ = 0;
-    char x[30]; // On dira que la taille max d'un mot est de 30
+    char x[46]; // On dira que la taille max d'un mot est de 45 lettres
 
     fichier = fopen(nom, "r");
     if(fichier == NULL){
@@ -30,42 +30,45 @@ int count_occ(char *nom, char *mot)
 void classify_files(char *mot)
 {
     /* Fonction qui permet de compter le nombres d'occurences dans tout les fichiers */
+
+    int fichier_debut = 17;
+    int fichier_fin = 20;
+    int nb_fich = 20;
     char *fich = "fichier_";
     char *extension = ".txt";
 
-    char **liste_fichiers = malloc(30 * sizeof(char*)); // tableau de string qui garde les noms des differents fichiers
+    char **liste_fichiers = malloc((nb_fich + 1) * sizeof(char*)); // tableau de string qui garde les noms des differents fichiers
     
 
-    for(int i = 1; i <= 3; i++){
-        char chiffre = i + '0'; 
-        char *pchiffre = malloc(2*sizeof(char));
-        pchiffre[0] = chiffre;
-        pchiffre[1] = '\0';    // conversion du int en char * pour utiliser strcat et strcopy
-
+    for(int i = fichier_debut; i <= fichier_fin; i++){
+        // Boucle utilisee pour stocker tout les noms de fichier de la forme fichier_i.txt
+        char *pchiffre = malloc(3*sizeof(char));
+        sprintf(pchiffre, "%d", i);  // conversion du int i en char * pour utiliser strcat et strcopy
+ 
         char *fullString = (char *)malloc(sizeof(strlen(fich) + strlen(extension) + strlen(pchiffre)) + 3); // +3 car 3 chaines donc 3 /0
         strcpy(fullString, fich);
         strcat(fullString, pchiffre);
         strcat(fullString, extension);
 
-        liste_fichiers[i-1] = malloc(30 * sizeof(int)); // on alloue de la mémoire pour copier la chaine précédente dans le tableau
+        liste_fichiers[i] = malloc((nb_fich + 1) * sizeof(int)); // on alloue de la mémoire pour copier la chaine précédente dans le tableau
+        strcpy(liste_fichiers[i], fullString);
 
-        strcpy(liste_fichiers[i-1], fullString);
         free(pchiffre);
         free(fullString);
     }
 
-    int *liste_occurences = malloc(3 * sizeof(int)); // stocke tout le nombre d'occurences pour chaque fichier
-    for(int i = 0; i < 3; i++){
+    int *liste_occurences = malloc((nb_fich + 1) * sizeof(int)); // stocke tout le nombre d'occurences pour chaque fichier
+    for(int i = fichier_debut; i <= fichier_fin; i++){
         liste_occurences[i] = count_occ(liste_fichiers[i], mot);
     }
     
     // on va chercher à trier le tableau des occurences pour savoir quel fichier contient le plus de fois le mot 
-    selection_sort(liste_occurences, liste_fichiers, 3);
+    selection_sort(liste_occurences, liste_fichiers, fichier_debut, fichier_fin);
 
-    print(liste_occurences, liste_fichiers, mot, 3);
+    print(liste_occurences, liste_fichiers, mot, fichier_debut, fichier_fin);
 
     // On libere toute la memoire allouee
-    for(int i = 0; i < 3; i++){
+    for(int i = fichier_debut; i <= fichier_fin; i++){
         free(liste_fichiers[i]);
     }
 
@@ -94,14 +97,14 @@ void swap_string(char* x, char* y)
 }
  
 
-void selection_sort(int *arr, char **liste_fichiers, int n)
+void selection_sort(int *arr, char **liste_fichiers, int fichier_debut, int fichier_fin)
 {
     /* Tri par selection pour trier le tableau d'occurences*/
     int i, j, min_idx;
  
-    for (i = 0; i < n - 1; i++) {
+    for (i = fichier_debut; i <= fichier_fin - 1; i++) {
         min_idx = i;
-        for (j = i + 1; j < n; j++){
+        for (j = i + 1; j <= fichier_fin; j++){
             if (arr[j] > arr[min_idx]){
                 min_idx = j;
             }
@@ -113,10 +116,69 @@ void selection_sort(int *arr, char **liste_fichiers, int n)
 }
 
 
-void print(int *liste_occurences, char **liste_fichiers, char *mot, int n){
+void print(int *liste_occurences, char **liste_fichiers, char *mot, int fichier_debut, int fichier_fin){
     /* Fonction utilisee pour afficher le nombre d occurences du mot dans tout les fichiers*/
-    for(int i = 0; i < n; i++){
+    for(int i = fichier_debut; i <= fichier_fin; i++){
         printf("%s nombre d’occurrences de %s = %d\n", liste_fichiers[i], mot, liste_occurences[i]);
+    }
+}
+
+
+int nb_mots(char *nom){
+    FILE *f;
+    int nb = 0;
+    char x[46];
+    f = fopen(nom, "r");
+    if(f == NULL){
+        printf("Ouverture du fichier %s impossible.\n", nom);
+        exit(1);
+    }
+    while(!(feof(f))){
+        fscanf(f, "%s", x);
+        nb++;
+    }
+    fclose(f);
+    return nb;
+}
+
+CRI* indexation(char *nom){
+    FILE *f;
+    CRI *liste_indexee;
+    int taille_max = 46;
+    int i = 0;
+    int nb = nb_mots(nom);
+    char x[taille_max];  // mot le plus long = 45 lettres
+
+    liste_indexee = (CRI*) malloc(nb * sizeof(CRI));
+    f = fopen(nom, "r");
+    if(f == NULL){
+        printf("Ouverture du fichier %s impossible.\n", nom);
+        exit(1);
+    }
+    while(!(feof(f))){
+        CRI mot_indexe;
+        mot_indexe.mot = (char *)malloc(taille_max * sizeof(char));
+        fscanf(f, "%s", x);
+        // for(int j = 0; j < i; j++){
+        //     if (strcmp(liste_indexee[j].mot, mot_indexe.mot) == 1){
+        //     }
+        // }
+        strcpy(mot_indexe.mot, x);
+        mot_indexe.nb_occ = count_occ(nom, x);
+        liste_indexee[i] = mot_indexe;
+        i++;
+    }
+    fclose(f);
+    return liste_indexee;
+}
+
+void affiche_liste_indexee(CRI *liste_indexee, int n){
+    for(int i = 0; i < n; i++){
+        printf("[%s %d]", liste_indexee[i].mot, liste_indexee[i].nb_occ);
+        if(i == n-1)
+            printf("\n");
+        else
+            printf(", ");
     }
 }
 
