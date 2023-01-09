@@ -22,6 +22,7 @@ void print(int *liste_occurences, char **liste_fichiers, char *mot, int fichier_
 CRI* indexation(char *nom);
 int nb_mots(char *nom);
 void affiche_liste_indexee(CRI *liste_indexee, int n);
+void free_liste_indexee(CRI *liste_indexee, int n);
 
 
 #endif

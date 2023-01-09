@@ -34,6 +34,7 @@ void classify_files(char *mot)
     int fichier_debut = 17;
     int fichier_fin = 20;
     int nb_fich = 20;
+
     char *fich = "fichier_";
     char *extension = ".txt";
 
@@ -45,12 +46,12 @@ void classify_files(char *mot)
         char *pchiffre = malloc(3*sizeof(char));
         sprintf(pchiffre, "%d", i);  // conversion du int i en char * pour utiliser strcat et strcopy
  
-        char *fullString = (char *)malloc(sizeof(strlen(fich) + strlen(extension) + strlen(pchiffre)) + 3); // +3 car 3 chaines donc 3 /0
+        char *fullString = (char *)malloc(sizeof(strlen(fich) + strlen(extension) + strlen(pchiffre)));
         strcpy(fullString, fich);
         strcat(fullString, pchiffre);
         strcat(fullString, extension);
-
-        liste_fichiers[i] = malloc((nb_fich + 1) * sizeof(int)); // on alloue de la mémoire pour copier la chaine précédente dans le tableau
+        // Allocation de mémoire pour copier la chaine précédente dans le tableau
+        liste_fichiers[i] = (char *)malloc(sizeof(strlen(fich) + strlen(extension) + strlen(pchiffre))); 
         strcpy(liste_fichiers[i], fullString);
 
         free(pchiffre);
@@ -144,10 +145,10 @@ int nb_mots(char *nom){
 CRI* indexation(char *nom){
     FILE *f;
     CRI *liste_indexee;
-    int taille_max = 46;
+    CRI mot_indexe;
+    int taille_max = 46; // mot le plus long = 45 lettres
     int i = 0;
     int nb = nb_mots(nom);
-    char x[taille_max];  // mot le plus long = 45 lettres
 
     liste_indexee = (CRI*) malloc(nb * sizeof(CRI));
     f = fopen(nom, "r");
@@ -156,19 +157,24 @@ CRI* indexation(char *nom){
         exit(1);
     }
     while(!(feof(f))){
-        CRI mot_indexe;
         mot_indexe.mot = (char *)malloc(taille_max * sizeof(char));
-        fscanf(f, "%s", x);
+        fscanf(f, "%s", mot_indexe.mot);
+
+        // mot_indexe.mot = (char *) realloc(mot_indexe.mot, strlen(mot_indexe.mot) * sizeof(char)); // Alloue le bon nombre de cases
         // for(int j = 0; j < i; j++){
-        //     if (strcmp(liste_indexee[j].mot, mot_indexe.mot) == 1){
+        //     if (strcmp(liste_indexee[j].mot, mot_indexe.mot) == 0){
+        //         i--;
+        //         for(int k = j; k < i; k++) liste_indexee[k] = liste_indexee[k+1];
         //     }
         // }
-        strcpy(mot_indexe.mot, x);
-        mot_indexe.nb_occ = count_occ(nom, x);
+
+        mot_indexe.nb_occ = count_occ(nom, mot_indexe.mot);
         liste_indexee[i] = mot_indexe;
         i++;
     }
     fclose(f);
+    // liste_indexee = (CRI *) realloc(liste_indexee, i * sizeof(CRI));
+    affiche_liste_indexee(liste_indexee, nb);
     return liste_indexee;
 }
 
@@ -182,7 +188,12 @@ void affiche_liste_indexee(CRI *liste_indexee, int n){
     }
 }
 
-
+void free_liste_indexee(CRI *liste_indexee, int n){
+    for(int i = 0; i < n; i++){
+        free(liste_indexee[i].mot);
+    }
+    free(liste_indexee);
+}
 
 // char* maj_to_min (char* c)
 // {
